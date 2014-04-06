@@ -4,6 +4,7 @@ module Geokit
     # http://www.geonames.org
     class GeonamesGeocoder < Geocoder
       config :key
+      config :premium
 
       private
 
@@ -18,10 +19,12 @@ module Geokit
         address_str.gsub!(/,/, " ")
         params = "/postalCodeSearch?placename=#{Geokit::Inflector::url_escape(address_str)}&maxRows=10"
 
+        host = premium ? 'http://ws.geonames.net' : 'http://ws.geonames.org'
+
         if key
-          "http://ws.geonames.net#{params}&username=#{key}"
+          "#{host}#{params}&username=#{key}"
         else
-          "http://ws.geonames.org#{params}"
+          "#{host}#{params}"
         end
       end
 
